@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/banner-styles.css">
+  <link rel="stylesheet" href="css/iconochive.css">
+  <link rel="stylesheet" href="css/update.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+ <div id="wrapper"> <div id="content"> <header><div id="header"> <div> <a href="/" title="Мониторинг серверов Minecraft">Сервера Minecraft</a> <div id="hnav"><nav> <input id="btn-menu" name="menu" type="checkbox"/> <label for="btn-menu"> </label> <ul><li><a href="/">Новые сервера</a></li><li><span>Добавить сервер</span></li></ul></nav></div> </div> </div></header> <div id="page"> <div class="alttitle"> <h1>Добавить сервер в мониторинг</h1></div><div class="shadow"></div> <div class="sender"> <input id="address" placeholder="Адрес сервера Minecraft:порт" type="text"/> <button id="send">Добавить сервер</button> <div class="answer" id="answer"> </div></div> <div class="addserver"> <h2>Сервер не отвечает?</h2> <div class="block"> <h3>Включите enable-query</h3> Для того, чтобы мы могли мониторить ваш сервер, установите в файле server.properties опцию enable-query=true. По возможности также разрешите запросы по протоколу UDP - это позволит нам получать список плагинов и игроков онлайн. </div> <div class="block"> <h3>Найдите надежный DNS</h3> Из-за нестабильного DNS ваш сервер может определяться мониторингом как оффлайн. Если вы не уверены в надежности своего DNS, укажите ip-адрес сервера. </div> <div class="clear"></div> <h2>Как поднять сервер в ТОП?</h2> <div class="block"> <h3>Распространяйте ссылку на страницу вашего сервера</h3> Наш робот ежедневно ищет ссылки на страницу вашего сервера, включая упоминания в социальных сетях. Ссылки вносят самый большой вклад в рейтинг сервера. </div> <div class="block"> <h3>Создавайте траффик на страницу сервера</h3> Рейтинг вашего сервера будет расти за счет пользователей, перешедших на страницу сервера с других сайтов. </div> <div class="clear"></div> <div class="block"> <h3>Используйте наши виджеты состояний и юзербары</h3> Используйте юзербары у себя в подписи на форумах и виджеты состояний на собственных сайтах. Это повысит рейтинг как за счет ссылок на вашу страницу, так и за счет посетителей, которые на нее перешли. </div> <div class="block"> <h3>Ухаживайте за вашей страницей</h3> Мы собственноручно награждаем владельцев серверов, которые добавили уникальное и качественное описание на страницу своего сервера. А также тех, кто отвечает на вопросы в комментариях на странице сервера. </div> <div class="clear"></div> </div> 
+ <script>
+  function set_answer(html) {
+    $('#answer').html(html);
+  }
+
+  function enable_button() {
+    $('#send').removeAttr('style').prop('disabled', false);
+  }
+
+  function disable_button() {
+    $('#send').css({'cursor': 'not-allowed', 'opacity': '0.7'}).prop('disabled', true);
+  }
+
+  var err_msg = '<div class="error" style="color:red;">Произошла неизвестная ошибка. Пожалуйста, попробуйте позднее.</div>';
+
+  $('#send').click(function() {
+    if ($("#send").prop('disabled')) return false;
+    
+    var address = $('#address').val().trim();
+    if (!address) {
+      alert('Не введено название сервера');
+      return false;
+    }
+    
+    if (address.indexOf(':') === -1) {
+      address += ':25565';
+      $('#address').val(address);
+    }
+    
+    set_answer('<div style="padding:10px;text-align:center;">Проверка сервера...</div>');
+    disable_button();
+    
+    $.ajax({
+      type: 'POST',
+      url: '/add-server',
+      data: { address: address },
+      dataType: 'json',
+      success: function(response) {
+        if (response.html) {
+          set_answer(response.html);
+        } else if (response.error) {
+          set_answer(response.error);
+        } else {
+          set_answer(err_msg);
+        }
+      },
+      error: function() {
+        set_answer(err_msg);
+      },
+      complete: function() {
+        enable_button();
+      }
+    });
+    
+    return false;
+  });
+</script>
+</div> </div> <div id="footer"> <div> <div> Возникли вопросы? Почитайте <a href="/faq" title="FAQ для владельцев серверов">FAQ</a><br/> Или напишите нам: <a href="mailto:monitoringminecraft@gmail.com">monitoringminecraft@gmail.com</a> </div> <div> <!-- Yandex.Metrika informer --> <a href="https://metrika.yandex.ru/stat/?id=21374131&amp;from=informer" rel="nofollow" target="_blank"><img alt="Яндекс.Метрика" class="ym-advanced-informer" data-cid="21374131" data-lang="ru" src="https://metrika-informer.com/informer/21374131/3_1_FFFFFFFF_FFFFFFFF_0_pageviews" style="width:88px; height:31px; border:0;" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)"/></a> <!-- /Yandex.Metrika informer --> <!--LiveInternet counter--><a href="https://www.liveinternet.ru/click" target="_blank"><img alt="" height="31" id="licnt55F0" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7" style="border:0" title="LiveInternet: показано число просмотров за 24 часа, посетителей за 24 часа и за сегодня" width="88"/></a><script>(function(d,s){d.getElementById("licnt55F0").src= "https://counter.yadro.ru/hit?t14.1;r"+escape(d.referrer)+ ((typeof(s)=="undefined")?"":";s"+s.width+"*"+s.height+"*"+ (s.colorDepth?s.colorDepth:s.pixelDepth))+";u"+escape(d.URL)+ ";h"+escape(d.title.substring(0,150))+";"+Math.random()}) (document,screen)</script><!--/LiveInternet--> </div><div class="clear"></div> </div> </div> </div> <!-- Yandex.Metrika counter --> <script type="text/javascript"> (function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter21374131 = new Ya.Metrika({ id:21374131, clickmap:true, trackLinks:true, accurateTrackBounce:true }); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = "https://cdn.jsdelivr.net/npm/yandex-metrica-watch/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks"); </script> <noscript><div><img alt="" src="https://mc.yandex.ru/watch/21374131" style="position:absolute; left:-9999px;"/></div></noscript> <!-- /Yandex.Metrika counter --> 
+</body></html>

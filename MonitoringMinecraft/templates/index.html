@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="../css/banner-styles.css">
+  <link rel="stylesheet" href="../css/iconochive.css">
+  <link rel="stylesheet" href="../css/novie.css">
+  <link rel="stylesheet" href="../css/update.min.css">
+  <style>
+    .shadow {
+      height: 5px;
+      background: url(../images/shadow.png) repeat-x;
+      margin: 10px 0;
+    }
+    .server .status .wrap {
+      padding: 5px 0;
+    }
+    .server .name a {
+      color: #1B57B1;
+      text-decoration: none;
+    }
+    .server .name a:hover {
+      text-decoration: underline;
+    }
+    .server .review {
+      color: #555;
+    }
+    .server.offline .status span {
+      color: red;
+    }
+    #musicPlayer {
+      position: fixed;
+      left: 10px;
+      bottom: 10px;
+      z-index: 1000;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 50%;
+      padding: 5px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <img id="musicPlayer" src="/media/muted.png" alt="Music toggle">
+  <audio id="backgroundMusic" loop>
+    <source src="/media/Caramelldansen.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const musicPlayer = document.getElementById('musicPlayer');
+      const backgroundMusic = document.getElementById('backgroundMusic');
+      
+      backgroundMusic.volume = 0.5;
+      backgroundMusic.muted = true;
+      
+      musicPlayer.addEventListener('click', function() {
+        if (backgroundMusic.muted) {
+          backgroundMusic.muted = false;
+          backgroundMusic.play().catch(e => console.log('Playback prevented:', e));
+          musicPlayer.src = "/media/unmuted.png";
+        } else {
+          backgroundMusic.muted = true;
+          musicPlayer.src = "/media/muted.png";
+        }
+      });
+    });
+  </script>
+
+ <div id="wrapper"> <div id="content"> <header><div id="header"> <div> <a href="/" title="Мониторинг серверов Minecraft">Сервера Minecraft</a> <div id="hnav"><nav> <input id="btn-menu" name="menu" type="checkbox"/> <label for="btn-menu"> </label> <ul><li><span>Новые сервера</span></li><li><a href="/add-server">Добавить сервер</a></li></ul></nav></div> </div> </div></header> <div id="page"> 
+   <div class="alttitle"> 
+     <h1>Новые сервера Майнкрафт</h1>
+   </div>
+   <div class="shadow"></div> 
+   <div class="cap"> 
+     <div>Это новые сервера майнкрафта, которые добавили совсем недавно. Заходите в наш телеграмм канал @eonware</div> 
+   </div>
+   <div class="shadow"></div> 
+
+   <table class="servers"> 
+     <thead> 
+       <tr> 
+         <td></td>
+         <td>Сервер</td> 
+         <td>Адрес</td> 
+         <td>Версия</td> 
+         <td>Добавлен</td> 
+         <td>Описание</td> 
+         <td>Игроков</td> 
+       </tr> 
+     </thead> 
+     <tbody> 
+       {% for server in servers %}
+       <tr class="server" itemscope itemtype="http://schema.org/GameServer">
+         <td class="icon"> 
+           <div class="noimg"></div> 
+         </td> 
+         <td> 
+           <div class="flag ru" title="Россия"></div> 
+           <div class="name" itemprop="name">
+             <a href="#" itemprop="url">{{ server.address.split(':')[0] }}</a>
+           </div> 
+         </td> 
+         <td class="ip"><span class="ip_serv"><b>{{ server.address }}</b></span></td> 
+         <td class="ver">{{ server.version }}</td> 
+         <td class="opened">{{ server.added_str }}</td> 
+         <td class="review" itemprop="description">{{ server.description }}</td> 
+         <td class="status">
+           <div class="wrap"> 
+             <span itemprop="playersOnline">{{ server.players_online }}</span> из {{ server.players_max }} 
+           </div>
+         </td> 
+       </tr> 
+       {% else %}
+       <tr class="server">
+         <td colspan="7" style="text-align: center; padding: 20px;">
+           Нет серверов в мониторинге. <a href="/add-server">Добавьте первый сервер!</a>
+         </td>
+       </tr>
+       {% endfor %}
+     </tbody>
+   </table> 
+
+   <div style="text-align:center; background:white; padding:3px;"> 
+     Маловато будет? Тогда добавляйте свои сервера в <a href="/add-server" style="font-weight:bold">мониторинг</a>.
+   </div> 
+ </div> </div> </div> 
+ <div id="footer"> 
+   <div> 
+     <div> 
+       Возникли вопросы? Напишите нам: <a href="mailto:monitoringminecraft@gmail.com">monitoringminecraft@gmail.com</a> 
+     </div> 
+     <div> 
+       <a href="https://metrika.yandex.ru/stat/?id=21374131&amp;from=informer" rel="nofollow" target="_blank">
+         <img alt="Яндекс.Метрика" class="ym-advanced-informer" data-cid="21374131" data-lang="ru" 
+              src="https://metrika-informer.com/informer/21374131/3_1_FFFFFFFF_FFFFFFFF_0_pageviews" 
+              style="width:88px; height:31px; border:0;" 
+              title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)"/>
+       </a> 
+     </div>
+     <div class="clear"></div> 
+   </div> 
+ </div> 
+</body>
+</html>
